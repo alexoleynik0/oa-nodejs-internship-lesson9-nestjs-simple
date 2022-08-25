@@ -21,12 +21,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "9.0.0",
-    "@nestjs/core": "9.0.0",
-    "@nestjs/platform-express": "9.0.0",
+    "@nestjs/common": "9.0.11",
+    "@nestjs/core": "9.0.11",
+    "@nestjs/mapped-types": "1.1.0",
+    "@nestjs/platform-express": "9.0.11",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
-    "rxjs": "7.2.0"
+    "rxjs": "7.5.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
@@ -66,6 +67,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
   }
 }
