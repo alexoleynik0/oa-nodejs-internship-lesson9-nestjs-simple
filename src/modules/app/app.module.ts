@@ -24,6 +24,7 @@ import { AppService } from './app.service';
         password: configService.get<string>('database.password'),
         database: configService.get<string>('database.database'),
         connectTimeoutMS: 3000,
+        useUnifiedTopology: true,
         entities: [__dirname + '/../**/*.entity.{ts,js}'], // NOTE: make sure the path is right
         synchronize: true,
       }),
