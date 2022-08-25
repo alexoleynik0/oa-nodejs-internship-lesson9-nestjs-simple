@@ -1,22 +1,36 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  UseFilters,
+  ValidationPipe,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { ObjectID } from 'typeorm';
+
+import { DbDuplicationErrorFilter } from 'src/filters/db-duplication-error.filter';
+import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
+import { UserByIdPipe } from 'src/pipes/user-by-id.pipe';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  @UseFilters(new DbDuplicationErrorFilter('email'))
+  create(
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    createUserDto: CreateUserDto,
+  ) {
     return this.usersService.create(createUserDto);
   }
 
@@ -26,17 +40,25 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findOne(@Param('id', UserByIdPipe) user: User) {
+    if (null === user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @UseFilters(new DbDuplicationErrorFilter('email'))
+  update(
+    @Param('id', new ParseObjectIdPipe()) id: ObjectID,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  remove(@Param('id', new ParseObjectIdPipe()) id: ObjectID) {
+    return this.usersService.remove(id);
   }
 }
