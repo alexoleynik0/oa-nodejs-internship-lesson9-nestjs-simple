@@ -4,19 +4,19 @@ import { MongoRepository, ObjectID } from 'typeorm';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: MongoRepository<User>,
+    @InjectRepository(UserEntity)
+    private usersRepository: MongoRepository<UserEntity>,
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    const user = this.usersRepository.create(createUserDto);
+    const userEntity = this.usersRepository.create(createUserDto);
 
-    return this.usersRepository.save(user);
+    return this.usersRepository.save(userEntity);
   }
 
   findAll() {
@@ -27,18 +27,21 @@ export class UsersService {
     return this.usersRepository.findOneBy({ _id: id });
   }
 
-  async update(id: ObjectID, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.findOne(id);
+  async update(
+    id: ObjectID,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    const userEntity = await this.findOne(id);
 
     return this.usersRepository.save({
-      ...user,
+      ...userEntity,
       ...updateUserDto,
     });
   }
 
   async remove(id: ObjectID) {
-    const user = await this.findOne(id);
+    const userEntity = await this.findOne(id);
 
-    return this.usersRepository.remove(user);
+    return this.usersRepository.remove(userEntity);
   }
 }

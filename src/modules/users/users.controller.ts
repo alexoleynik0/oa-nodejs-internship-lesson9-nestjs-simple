@@ -14,11 +14,11 @@ import { ObjectID } from 'typeorm';
 
 import { DbDuplicationErrorFilter } from 'src/filters/db-duplication-error.filter';
 import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
-import { UserByIdPipe } from 'src/pipes/user-by-id.pipe';
+import { UserEntityByIdPipe } from 'src/pipes/user-entity-by-id.pipe';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -40,17 +40,17 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id', UserByIdPipe) user: User) {
-    if (null === user) {
+  findOne(@Param('id', UserEntityByIdPipe) userEntity: UserEntity) {
+    if (null === userEntity) {
       throw new NotFoundException();
     }
-    return user;
+    return userEntity;
   }
 
   @Patch(':id')
   @UseFilters(new DbDuplicationErrorFilter('email'))
   update(
-    @Param('id', new ParseObjectIdPipe()) id: ObjectID,
+    @Param('id', ParseObjectIdPipe) id: ObjectID,
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
     updateUserDto: UpdateUserDto,
   ) {
@@ -58,7 +58,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  remove(@Param('id', new ParseObjectIdPipe()) id: ObjectID) {
+  remove(@Param('id', ParseObjectIdPipe) id: ObjectID) {
     return this.usersService.remove(id);
   }
 }
