@@ -1,10 +1,36 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import configuration from 'src/config/configuration';
 import { UsersModule } from 'src/modules/users/users.module';
 
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
 @Module({
-  imports: [UsersModule],
+  imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mongodb',
+        // type: configService.get<DatabaseType>('database.type'), // IDEA: make this work?
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.username'),
+        password: configService.get<string>('database.password'),
+        database: configService.get<string>('database.database'),
+        connectTimeoutMS: 3000,
+        entities: [__dirname + '/../**/*.entity.{ts,js}'], // NOTE: make sure the path is right
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
