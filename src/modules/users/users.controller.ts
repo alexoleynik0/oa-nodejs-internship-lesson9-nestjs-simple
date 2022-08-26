@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   Patch,
   Post,
@@ -15,6 +14,7 @@ import {
 import { ObjectID } from 'typeorm';
 
 import { DbDuplicationErrorFilter } from 'src/filters/db-duplication-error.filter';
+import { ResourceNotFoundInterceptor } from 'src/interceptors/resource-not-found.interceptor';
 import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
 import { UserEntityByIdPipe } from 'src/pipes/user-entity-by-id.pipe';
 
@@ -25,6 +25,7 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(ResourceNotFoundInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -44,9 +45,6 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id', UserEntityByIdPipe) userEntity: UserEntity) {
-    if (null === userEntity) {
-      throw new NotFoundException();
-    }
     return userEntity;
   }
 
