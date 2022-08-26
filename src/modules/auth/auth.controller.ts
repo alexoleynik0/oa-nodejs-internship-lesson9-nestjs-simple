@@ -3,6 +3,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  HttpCode,
   Post,
   UseFilters,
   UseInterceptors,
@@ -30,6 +31,7 @@ export class AuthController {
   }
 
   @Post('/login')
+  @HttpCode(200)
   @UseFilters(new DbDuplicationErrorFilter('email'))
   async login(
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))

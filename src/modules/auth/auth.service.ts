@@ -4,7 +4,7 @@ import { MongoRepository } from 'typeorm';
 
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 
-import { Roles } from '../users/interfaces/roles.enum';
+import { Role } from '../users/interfaces/role.enum';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { PasswordHelper } from './helpers/password.helper';
@@ -22,7 +22,7 @@ export class AuthService {
     );
 
     const userEntity = this.usersRepository.create(registerUserDto);
-    userEntity.role = Roles.Admin;
+    userEntity.role = Role.Admin;
 
     return this.usersRepository.save(userEntity);
   }
@@ -31,7 +31,7 @@ export class AuthService {
     const userEntity = await this.usersRepository.findOneBy({
       email: loginUserDto.email,
     });
-    if (userEntity === null || userEntity.role !== Roles.Admin) {
+    if (userEntity === null || userEntity.role !== Role.Admin) {
       return null;
     }
     if (
