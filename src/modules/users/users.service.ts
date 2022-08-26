@@ -23,25 +23,36 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  findOne(id: ObjectID) {
+  findOne(id: ObjectID): Promise<null | UserEntity> {
     return this.usersRepository.findOneBy({ _id: id });
   }
 
   async update(
     id: ObjectID,
     updateUserDto: UpdateUserDto,
-  ): Promise<UserEntity> {
-    const userEntity = await this.findOne(id);
+  ): Promise<null | UserEntity> {
+    let userEntity = await this.findOne(id);
 
-    return this.usersRepository.save({
-      ...userEntity,
-      ...updateUserDto,
-    });
+    if (userEntity === null) {
+      return null;
+    }
+
+    userEntity = { ...userEntity, ...updateUserDto };
+
+    await this.usersRepository.save(userEntity);
+
+    return await this.findOne(id);
   }
 
-  async remove(id: ObjectID) {
+  async remove(id: ObjectID): Promise<null | UserEntity> {
     const userEntity = await this.findOne(id);
 
-    return this.usersRepository.remove(userEntity);
+    if (userEntity === null) {
+      return null;
+    }
+
+    this.usersRepository.remove(userEntity);
+
+    return userEntity;
   }
 }
