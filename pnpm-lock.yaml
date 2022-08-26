@@ -24,6 +24,7 @@ specifiers:
   eslint: ^8.0.1
   eslint-config-prettier: ^8.3.0
   eslint-plugin-prettier: ^4.0.0
+  helmet: 5.1.1
   jest: 28.1.2
   mongodb: 3.7.3
   mongoose: 6.5.3
@@ -51,6 +52,7 @@ dependencies:
   bcrypt: 5.0.1
   class-transformer: 0.5.1
   class-validator: 0.13.2
+  helmet: 5.1.1
   mongodb: 3.7.3
   mongoose: 6.5.3
   reflect-metadata: 0.1.13
@@ -3028,6 +3030,11 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+
+  /helmet/5.1.1:
+    resolution: {integrity: sha512-/yX0oVZBggA9cLJh8aw3PPCfedBnbd7J2aowjzsaWwZh7/UFY0nccn/aHAggIgWUFfnykX8GKd3a1pSbrmlcVQ==}
+    engines: {node: '>=12.0.0'}
+    dev: false
 
   /hexoid/1.0.0:
     resolution: {integrity: sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==}
