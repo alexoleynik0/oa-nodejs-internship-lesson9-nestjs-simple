@@ -31,7 +31,7 @@ export class UsersController {
 
   @Post()
   @UseFilters(new DbDuplicationErrorFilter('email'))
-  create(
+  async create(
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
     createUserDto: CreateUserDto,
   ) {
@@ -39,18 +39,18 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', UserEntityByIdPipe) userEntity: UserEntity) {
+  async findOne(@Param('id', UserEntityByIdPipe) userEntity: UserEntity) {
     return userEntity;
   }
 
   @Patch(':id')
   @UseFilters(new DbDuplicationErrorFilter('email'))
-  update(
+  async update(
     @Param('id', ParseObjectIdPipe) id: ObjectID,
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
     updateUserDto: UpdateUserDto,
@@ -59,7 +59,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseObjectIdPipe) id: ObjectID) {
+  async remove(@Param('id', ParseObjectIdPipe) id: ObjectID) {
     return this.usersService.remove(id);
   }
 }

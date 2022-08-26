@@ -13,7 +13,7 @@ import { Role } from '../interfaces/role.enum';
 @Entity({ name: 'users' })
 export class UserEntity {
   @ObjectIdColumn()
-  @Transform(({ value }) => value.toString())
+  @Transform(({ value }) => (value ?? '').toString())
   _id: ObjectID;
 
   @Column({

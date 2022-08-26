@@ -13,17 +13,17 @@ export class UsersService {
     private usersRepository: MongoRepository<UserEntity>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     const userEntity = this.usersRepository.create(createUserDto);
 
     return this.usersRepository.save(userEntity);
   }
 
-  findAll() {
+  async findAll() {
     return this.usersRepository.find();
   }
 
-  findOne(id: ObjectID): Promise<null | UserEntity> {
+  async findOne(id: ObjectID): Promise<null | UserEntity> {
     return this.usersRepository.findOneBy({ _id: id });
   }
 
@@ -31,17 +31,15 @@ export class UsersService {
     id: ObjectID,
     updateUserDto: UpdateUserDto,
   ): Promise<null | UserEntity> {
-    let userEntity = await this.findOne(id);
+    const userEntity = await this.findOne(id);
 
     if (userEntity === null) {
       return null;
     }
 
-    userEntity = { ...userEntity, ...updateUserDto };
-
-    await this.usersRepository.save(userEntity);
-
-    return await this.findOne(id);
+    return this.usersRepository.save(
+      new UserEntity({ ...userEntity, ...updateUserDto }),
+    );
   }
 
   async remove(id: ObjectID): Promise<null | UserEntity> {
@@ -51,7 +49,7 @@ export class UsersService {
       return null;
     }
 
-    this.usersRepository.remove(userEntity);
+    this.usersRepository.delete(id); // IDEA: check if deleted
 
     return userEntity;
   }
