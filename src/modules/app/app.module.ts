@@ -16,6 +16,7 @@ import { AppService } from './app.service';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mongodb',
         // type: configService.get<DatabaseType>('database.type'), // IDEA: make this work?
@@ -29,7 +30,6 @@ import { AppService } from './app.service';
         entities: [__dirname + '/../**/*.entity.{ts,js}'], // NOTE: make sure the path is right
         synchronize: true,
       }),
-      inject: [ConfigService],
     }),
     AuthModule,
     UsersModule,
