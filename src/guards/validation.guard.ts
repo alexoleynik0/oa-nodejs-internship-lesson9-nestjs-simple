@@ -8,17 +8,13 @@ import {
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 
-export enum ValidationRequestPropertyEnum {
-  'body' = 'body',
-  'query' = 'query',
-  'params' = 'params',
-}
+type ValidationRequestPropertyName = 'body' | 'query' | 'params';
 
 @Injectable()
 export class ValidationGuard implements CanActivate {
   constructor(
     private expectedType: Type<any>,
-    private validationRequestPropertyName: ValidationRequestPropertyEnum = ValidationRequestPropertyEnum.body,
+    private validationRequestPropertyName: ValidationRequestPropertyName = 'body',
   ) {}
 
   canActivate(
