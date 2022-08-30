@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Role } from '../interfaces/role.enum';
+import { RoleEnum } from '../interfaces/role.enum';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -34,9 +34,9 @@ export class UserEntity {
   @Exclude()
   password: string;
 
-  @Column({ default: Role.User, enum: Role })
+  @Column({ default: RoleEnum.User, enum: RoleEnum })
   @Exclude()
-  role: Role;
+  role: RoleEnum;
 
   @CreateDateColumn()
   createdAt: Date;
