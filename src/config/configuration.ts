@@ -1,3 +1,7 @@
+import { config } from 'dotenv';
+
+config(); // it seems redundant but is needed to use config in Decorators
+
 export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
   debug: process.env.DEBUG === 'true',
@@ -14,8 +18,9 @@ export default () => ({
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-    auth_token_expires_in: process.env.JWT_AUTH_TOKEN_EXPIRES_IN || '10m',
+    auth_token_expires_in:
+      parseInt(process.env.JWT_AUTH_TOKEN_EXPIRES_IN, 10) || 600,
     auth_refresh_token_expires_in:
-      process.env.JWT_AUTH_REFRESH_TOKEN_EXPIRES_IN || '1d',
+      parseInt(process.env.JWT_AUTH_REFRESH_TOKEN_EXPIRES_IN, 10) || 86400,
   },
 });

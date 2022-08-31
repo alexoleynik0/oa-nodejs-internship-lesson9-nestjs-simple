@@ -28,7 +28,7 @@ import { AppService } from './app.service';
         connectTimeoutMS: 3000,
         useUnifiedTopology: true,
         entities: [__dirname + '/../**/*.entity.{ts,js}'], // NOTE: make sure the path is right
-        synchronize: true,
+        synchronize: true, // NOTE: set `false` in prod so no index creation errors occur, run schema:sync command when needed
       }),
     }),
     AuthModule,
