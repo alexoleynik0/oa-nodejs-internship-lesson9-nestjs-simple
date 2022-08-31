@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { ObjectId } from 'mongodb';
+import { ObjectID } from 'mongodb';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { UserEntity } from 'src/modules/users/entities/user.entity';
@@ -27,6 +27,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       return null;
     }
 
-    return this.usersService.findOne(new ObjectId(payload.sub));
+    return this.usersService.findOne(new ObjectID(payload.sub));
   }
 }

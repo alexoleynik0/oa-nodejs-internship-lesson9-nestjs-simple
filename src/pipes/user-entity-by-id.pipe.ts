@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { ObjectId } from 'mongodb';
+import { ObjectID } from 'mongodb';
 
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
@@ -12,13 +12,13 @@ export class UserEntityByIdPipe
 
   // IDEA: use ParseObjectIdPipe here
   transform(value: string) {
-    const validObjectId = ObjectId.isValid(value);
+    const validObjectId = ObjectID.isValid(value);
 
     if (!validObjectId) {
       throw new BadRequestException('Invalid ObjectId');
     }
 
-    const id: ObjectId = new ObjectId(value);
+    const id: ObjectID = new ObjectID(value);
 
     return this.usersService.findOne(id);
   }

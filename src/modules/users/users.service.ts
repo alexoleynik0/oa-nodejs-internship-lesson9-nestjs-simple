@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository, ObjectID } from 'typeorm';
+import { ObjectID } from 'mongodb';
+import { MongoRepository } from 'typeorm';
 
 import { UserEntity } from './entities/user.entity';
 

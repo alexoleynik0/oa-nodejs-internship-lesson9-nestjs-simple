@@ -1,9 +1,10 @@
 import { Exclude, Transform } from 'class-transformer';
+import { IsNotEmpty } from 'class-validator';
+import { ObjectID } from 'mongodb';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ObjectID,
   ObjectIdColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -19,24 +20,25 @@ export class UserEntity {
   @Column({
     unique: true,
   })
+  @IsNotEmpty()
   email: string;
 
   @Column()
-  firstName: string;
+  firstName?: string;
 
   @Column()
-  lastName: string;
+  lastName?: string;
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive?: boolean;
 
   @Column({ select: false })
   @Exclude()
-  password: string;
+  password?: string;
 
   @Column({ default: RoleEnum.User, enum: RoleEnum })
   @Exclude()
-  role: RoleEnum;
+  role?: RoleEnum;
 
   @CreateDateColumn()
   createdAt: Date;

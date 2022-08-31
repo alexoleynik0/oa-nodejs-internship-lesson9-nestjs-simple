@@ -11,7 +11,7 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { ObjectID } from 'typeorm';
+import { ObjectID } from 'mongodb';
 
 import { DbDuplicationErrorFilter } from 'src/filters/db-duplication-error.filter';
 import { ResourceNotFoundInterceptor } from 'src/interceptors/resource-not-found.interceptor';
