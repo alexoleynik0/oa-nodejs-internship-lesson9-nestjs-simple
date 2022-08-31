@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MongoRepository } from 'typeorm';
 
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { RoleEnum } from 'src/modules/users/interfaces/role.enum';
 import { UsersService } from 'src/modules/users/users.service';
 
+import { RefreshTokenEntity } from './entities/refresh-token.entity';
 import { PasswordHelper } from './helpers/password.helper';
 import { JwtPayload, LoginResponse } from './interfaces/auth.interface';
 
@@ -15,6 +18,8 @@ export class AuthService {
     private configService: ConfigService,
     private jwtService: JwtService,
     private usersService: UsersService,
+    @InjectRepository(RefreshTokenEntity)
+    private refreshTokenRepository: MongoRepository<RefreshTokenEntity>,
   ) {}
 
   async validateUser(
@@ -47,29 +52,9 @@ export class AuthService {
   }
 
   async login(userEntity: UserEntity): Promise<LoginResponse> {
-    const accessToken = this.jwtService.sign(
-      this.getAccessTokenPayload(userEntity),
-      {
-        expiresIn: this.configService.get<string>(
-          'jwt.auth_refresh_token_expires_in',
-        ),
-      },
-    );
-
-    const refreshToken = this.jwtService.sign(
-      this.getRefreshTokenPayload(userEntity),
-      {
-        expiresIn: this.configService.get<string>(
-          'jwt.auth_refresh_token_expires_in',
-        ),
-      },
-    );
-
-    // TODO: save refreshToken for the user
-
     return {
-      accessToken,
-      refreshToken,
+      accessToken: this.generateAccessToken(userEntity),
+      refreshToken: this.generateRefreshToken(userEntity),
     };
   }
 
@@ -87,5 +72,37 @@ export class AuthService {
       email: userEntity.email,
       tokenType: 'refresh',
     };
+  }
+
+  protected generateAccessToken(userEntity: UserEntity): string {
+    const accessToken = this.jwtService.sign(
+      this.getAccessTokenPayload(userEntity),
+      {
+        expiresIn: this.configService.get<string>(
+          'jwt.auth_refresh_token_expires_in',
+        ),
+      },
+    );
+
+    return accessToken;
+  }
+
+  protected generateRefreshToken(userEntity: UserEntity): string {
+    const refreshToken = this.jwtService.sign(
+      this.getRefreshTokenPayload(userEntity),
+      {
+        expiresIn: this.configService.get<string>(
+          'jwt.auth_refresh_token_expires_in',
+        ),
+      },
+    );
+
+    const refreshTokenEntity = this.refreshTokenRepository.create({
+      userId: userEntity._id,
+      token: refreshToken,
+    });
+    this.refreshTokenRepository.save(refreshTokenEntity);
+
+    return refreshToken;
   }
 }
