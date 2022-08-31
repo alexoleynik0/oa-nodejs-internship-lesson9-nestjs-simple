@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   UseFilters,
+  UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { ObjectID } from 'mongodb';
 
 import { DbDuplicationErrorFilter } from 'src/filters/db-duplication-error.filter';
 import { ResourceNotFoundInterceptor } from 'src/interceptors/resource-not-found.interceptor';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { ParseObjectIdPipe } from 'src/pipes/parse-object-id.pipe';
 import { UserEntityByIdPipe } from 'src/pipes/user-entity-by-id.pipe';
 
@@ -59,6 +61,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id', ParseObjectIdPipe) id: ObjectID) {
     return this.usersService.remove(id);
   }
