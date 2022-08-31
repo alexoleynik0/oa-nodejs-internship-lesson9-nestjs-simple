@@ -39,6 +39,16 @@ export class AuthService {
     return userEntity;
   }
 
+  async validateRefreshToken(
+    userEntity: UserEntity,
+    oldRefreshToken: string,
+  ): Promise<RefreshTokenEntity> {
+    return this.refreshTokenRepository.findOneBy({
+      userId: userEntity._id,
+      token: oldRefreshToken,
+    });
+  }
+
   async register(registerUserDto: Partial<UserEntity>): Promise<LoginResponse> {
     const userDto: Partial<UserEntity> = {
       ...registerUserDto,
@@ -56,6 +66,24 @@ export class AuthService {
       accessToken: this.generateAccessToken(userEntity),
       refreshToken: this.generateRefreshToken(userEntity),
     };
+  }
+
+  async redeemTokens(
+    userEntity: UserEntity,
+    oldRefreshToken: string,
+  ): Promise<LoginResponse> {
+    this.logout(userEntity, oldRefreshToken);
+
+    return this.login(userEntity);
+  }
+
+  async logout(userEntity: UserEntity, oldRefreshToken: string): Promise<void> {
+    const refreshToken_toDelete = await this.refreshTokenRepository.findOneBy({
+      userId: userEntity._id,
+      token: oldRefreshToken,
+    });
+
+    this.refreshTokenRepository.remove(refreshToken_toDelete);
   }
 
   protected getAccessTokenPayload(userEntity: UserEntity): JwtPayload {

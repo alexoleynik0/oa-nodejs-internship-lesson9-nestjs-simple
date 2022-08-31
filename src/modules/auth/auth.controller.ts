@@ -19,7 +19,9 @@ import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { TokenUserDto } from './dto/token-user.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
@@ -41,6 +43,25 @@ export class AuthController {
   @UseGuards(new ValidationGuard(LoginUserDto), LocalAuthGuard)
   async login(@RequestUser() userEntity: UserEntity) {
     return this.authService.login(userEntity);
+  }
+
+  @Post('token')
+  @UseGuards(new ValidationGuard(TokenUserDto), JwtRefreshAuthGuard)
+  async token(
+    @RequestUser() userEntity: UserEntity,
+    @Body('oldRefreshToken') oldRefreshToken: string,
+  ) {
+    return this.authService.redeemTokens(userEntity, oldRefreshToken);
+  }
+
+  @Post('logout')
+  @HttpCode(204)
+  @UseGuards(new ValidationGuard(TokenUserDto), JwtRefreshAuthGuard)
+  async logout(
+    @RequestUser() userEntity: UserEntity,
+    @Body('oldRefreshToken') oldRefreshToken: string,
+  ) {
+    this.authService.logout(userEntity, oldRefreshToken);
   }
 
   @Get('profile')
