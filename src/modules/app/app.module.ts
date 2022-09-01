@@ -17,6 +17,7 @@ import { UsersModule } from 'src/modules/users/users.module';
       useFactory: (configService: ConfigService) => ({
         type: 'mongodb',
         // type: configService.get<DatabaseType>('database.type'), // IDEA: make this work?
+        url: configService.get<string>('database.url'),
         host: configService.get<string>('database.host'),
         port: configService.get<number>('database.port'),
         username: configService.get<string>('database.username'),
