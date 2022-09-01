@@ -8,6 +8,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost } from '@nestjs/core';
 
+import { ErrorResponse } from './interfaces/error-response.interface';
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   constructor(
@@ -37,7 +39,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof Error ? exception.message : 'Internal server error';
     const name = exception instanceof Error ? exception.name : 'Error';
 
-    const responseBody = {
+    const responseBody: ErrorResponse = {
       statusCode,
       message,
       name,
