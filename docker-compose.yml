@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  api:
+    image: alexoleynik0/oa-lesson9-nestjs-simple:0.1.0
+    container_name: nestjs_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+      - DATABASE_HOST=mongodb
+    ports:
+      - 8080:3000
+    networks:
+      - server-network
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:3.6
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    networks:
+      - server-network
+    volumes:
+      - database:/data/db
+    restart: always
+
+networks:
+  server-network:
+
+volumes:
+  database:
+
