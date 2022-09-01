@@ -7,7 +7,7 @@ import { AppModule } from './../src/modules/app/app.module';
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -16,7 +16,11 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/api/v1 (GET)', () => {
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('GET /api/v1 returns 404', () => {
     return request(app.getHttpServer()).get('/api/v1').expect(404);
   });
 });
