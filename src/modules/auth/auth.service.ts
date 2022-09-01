@@ -10,7 +10,7 @@ import { UsersService } from 'src/modules/users/users.service';
 
 import { RefreshTokenEntity } from './entities/refresh-token.entity';
 import { PasswordHelper } from './helpers/password.helper';
-import { JwtPayload, LoginResponse } from './interfaces/auth.interface';
+import { JwtPayload, LoginSuccessResponse } from './interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -49,7 +49,9 @@ export class AuthService {
     });
   }
 
-  async register(registerUserDto: Partial<UserEntity>): Promise<LoginResponse> {
+  async register(
+    registerUserDto: Partial<UserEntity>,
+  ): Promise<LoginSuccessResponse> {
     const userDto: Partial<UserEntity> = {
       ...registerUserDto,
       role: RoleEnum.Admin,
@@ -61,7 +63,7 @@ export class AuthService {
     return this.login(userEntity);
   }
 
-  async login(userEntity: UserEntity): Promise<LoginResponse> {
+  async login(userEntity: UserEntity): Promise<LoginSuccessResponse> {
     return {
       accessToken: this.generateAccessToken(userEntity),
       refreshToken: this.generateRefreshToken(userEntity),
@@ -71,7 +73,7 @@ export class AuthService {
   async redeemTokens(
     userEntity: UserEntity,
     oldRefreshToken: string,
-  ): Promise<LoginResponse> {
+  ): Promise<LoginSuccessResponse> {
     this.logout(userEntity, oldRefreshToken);
 
     return this.login(userEntity);
