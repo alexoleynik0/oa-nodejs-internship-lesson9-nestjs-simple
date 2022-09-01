@@ -16,6 +16,15 @@ export default () => ({
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DATABASE,
   },
+  docs: {
+    name: process.env.DOCS_NAME || process.env.APP_NAME || 'MyApp API',
+    description: process.env.DOCS_DESCRIPTION || '',
+    basic_auth: {
+      users: (process.env.DOCS_BASIC_AUTH_USERS || 'admin:secret')
+        .split(',')
+        .reduce((a, v) => ({ ...a, [v.split(':')[0]]: v.split(':')[1] }), {}),
+    },
+  },
   jwt: {
     secret: process.env.JWT_SECRET,
     auth_token_expires_in:
