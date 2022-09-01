@@ -11,6 +11,7 @@ specifiers:
   '@nestjs/passport': 9.0.0
   '@nestjs/platform-express': 9.0.11
   '@nestjs/schematics': ^9.0.0
+  '@nestjs/swagger': 6.1.0
   '@nestjs/testing': ^9.0.0
   '@nestjs/typeorm': 9.0.1
   '@trivago/prettier-plugin-sort-imports': ^3.3.0
@@ -29,6 +30,7 @@ specifiers:
   eslint: ^8.0.1
   eslint-config-prettier: ^8.3.0
   eslint-plugin-prettier: ^4.0.0
+  express-basic-auth: 1.2.1
   helmet: 5.1.1
   jest: 28.1.2
   mongodb: 3.7.3
@@ -58,11 +60,13 @@ dependencies:
   '@nestjs/mongoose': 9.2.0_hlaacjb5c4qsmqh2anxllsj4sy
   '@nestjs/passport': 9.0.0_qmmxbt2dwte7f4tgsyyoa7ob5i
   '@nestjs/platform-express': 9.0.11_khr6mt6ojlxbw7bo55fknouh34
+  '@nestjs/swagger': 6.1.0_ivnm4e5qsl7bn6kf5k4o57kelu
   '@nestjs/typeorm': 9.0.1_sp4gtzkbiyh24r2ydcb6yqstha
   bcrypt: 5.0.1
   class-transformer: 0.5.1
   class-validator: 0.13.2
   dotenv: 16.0.1
+  express-basic-auth: 1.2.1
   helmet: 5.1.1
   mongodb: 3.7.3
   mongoose: 6.5.3
@@ -1094,6 +1098,30 @@ packages:
       - chokidar
     dev: true
 
+  /@nestjs/swagger/6.1.0_ivnm4e5qsl7bn6kf5k4o57kelu:
+    resolution: {integrity: sha512-Lflplv216nXkH6By/jMggQjpuH1V67M07tgHXUAZujAwG3LAJ1CfSvzuFckK4MAb54xQTYvFgfVPWkXqvKXzdA==}
+    peerDependencies:
+      '@fastify/static': ^6.0.0
+      '@nestjs/common': ^9.0.0
+      '@nestjs/core': ^9.0.0
+      reflect-metadata: ^0.1.12
+    peerDependenciesMeta:
+      '@fastify/static':
+        optional: true
+    dependencies:
+      '@nestjs/common': 9.0.11_allg6cauirbqzgqcmexy2wdnoq
+      '@nestjs/core': 9.0.11_psficsz3mqirqwo2ujbfhdr2aa
+      '@nestjs/mapped-types': 1.1.0_f7n2wnftp7gwcja4o2nbkzq5xi
+      js-yaml: 4.1.0
+      lodash: 4.17.21
+      path-to-regexp: 3.2.0
+      reflect-metadata: 0.1.13
+      swagger-ui-dist: 4.14.0
+    transitivePeerDependencies:
+      - class-transformer
+      - class-validator
+    dev: false
+
   /@nestjs/testing/9.0.11_z6gh3n3qpn6ig2eqi2q57zofvq:
     resolution: {integrity: sha512-tT+yj3av7ZJb9Cy09C4+FoUULvzUntf81g5eK5shRVeQ35RWqr7E5Uq77B7ePUF2Er/TictVZk43d7rKq1ClNA==}
     peerDependencies:
@@ -1930,6 +1958,13 @@ packages:
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
+  /basic-auth/2.0.1:
+    resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
+    engines: {node: '>= 0.8'}
+    dependencies:
+      safe-buffer: 5.1.2
+    dev: false
+
   /bcrypt/5.0.1:
     resolution: {integrity: sha512-9BTgmrhZM2t1bNuDtrtIMVSmmxZBrJ71n8Wg+YgdjHuIWYF7SjjmCPZFB+/5i/o/PIeRpwVJR3P+NrpIItUjqw==}
     engines: {node: '>= 10.0.0'}
@@ -2744,6 +2779,12 @@ packages:
       jest-message-util: 28.1.3
       jest-util: 28.1.3
     dev: true
+
+  /express-basic-auth/1.2.1:
+    resolution: {integrity: sha512-L6YQ1wQ/mNjVLAmK3AG1RK6VkokA1BIY6wmiH304Xtt/cLTps40EusZsU1Uop+v9lTDPxdtzbFmdXfFO3KEnwA==}
+    dependencies:
+      basic-auth: 2.0.1
+    dev: false
 
   /express/4.18.1:
     resolution: {integrity: sha512-zZBcOX9TfehHQhtupq57OF8lFZ3UZi08Y97dwFCkD8p9d/d2Y3M+ykKcwaMDEL+4qyUolgBDX6AblpR3fL212Q==}
@@ -5098,6 +5139,10 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
     dev: true
+
+  /swagger-ui-dist/4.14.0:
+    resolution: {integrity: sha512-TBzhheU15s+o54Cgk9qxuYcZMiqSm/SkvKnapoGHOF66kz0Y5aGjpzj5BT/vpBbn6rTPJ9tUYXQxuDWfsjiGMw==}
+    dev: false
 
   /symbol-observable/4.0.0:
     resolution: {integrity: sha512-b19dMThMV4HVFynSAM1++gBHAbk2Tc/osgLIBZMKsyqh34jb2e8Os7T6ZW/Bt3pJFdBTd2JwAnAAEQV7rSNvcQ==}
