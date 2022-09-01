@@ -3,6 +3,7 @@ services:
   api:
     image: alexoleynik0/oa-lesson9-nestjs-simple:0.1.0
     container_name: nestjs_api
+    env_file: .env
     build:
       context: .
       dockerfile: Dockerfile
@@ -33,4 +34,3 @@ networks:
 
 volumes:
   database:
-
